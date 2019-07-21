@@ -4,26 +4,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>좋아요.</title>
+    <title>구구단</title>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 </head>
 <body>
     <div id="root">
-        <div v-if="liked">좋아요 눌렀음</div>
-        <button v-else v-on:click="onClickButton">Like</button>
+        <div> {{ first }} 곱하기 {{ second }}는 ?</div>
+        <form v-on:submit="onSubmitForm">
+            <input type="number" ref="answer" v-model="value">
+            <button type="submit">입력</button>
+        </form>
+        <div id="result">{{ result }}</div>
     </div>
 </body>
 <script>
     var app = new Vue({
         el: '#root',
         data: {
-            liked: false,
+            first: Math.ceil(Math.random() * 9),
+            second: Math.ceil(Math.random() * 9),
+            value: '',
+            result: ''
         },
         methods: {
-            onClickButton() {
-                //여기서 this는 위의 data를 가리킨다.
-                this.liked = true;
-            },
+            onSubmitForm(e) {
+                //페이지 새로고침을 막는다.
+                e.preventDefault();
+                if (this.first *  this.second === parseInt(this.value)){
+                    this.result = '맞음';
+                    this.first = Math.ceil(Math.random() * 9);
+                    this.second = Math.ceil(Math.random() * 9);
+                    this.value = '';
+                    this.$refs.answer.focus(); //ref answer애 포커스를 둔
+                } else {
+                    this.result = '땡';
+                    this.$refs.answer.focus();
+                }
+
+            }
         },
     });
 </script>
